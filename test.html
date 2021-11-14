@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>page test</title>
+
+    <meta charset="utf-8">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+
+    <meta name="description" content="Test page">
+    <meta property="og:description" content="Test page">
+
+    <meta name="author" content="Benoit">
+
+
+    <meta property="og:title" content="page test">
+    <meta property="twitter:title" content="page test">
+
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="main" role="main" class="container">
+
+        <h1>page test</h1>
+
+        <div class="entry">
+            <canvas width="960" height="665"></canvas>
+            <script type="text/javascript">
+                const canvas = document.querySelector('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const width = canvas.width = document.getElementById("main").clientWidth;
+                const height = canvas.height = window.innerHeight;
+
+                ctx.moveTo(0, 0);
+                ctx.lineTo(width, height);
+                ctx.stroke();
+
+                function reset() {
+                }
+            </script>
+
+            <button type="button" onclick="reset()">Reset</button>
+
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
