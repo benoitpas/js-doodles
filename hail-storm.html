@@ -33,19 +33,8 @@
 
         <div class="entry">
             <canvas width="960" height="665"></canvas>
-            <script type="text/javascript">
-                const canvas = document.querySelector('canvas');
-                const ctx = canvas.getContext('2d');
+            <script type="text/javascript" src="hail-storm.js">
 
-                const width = canvas.width = document.getElementById("main").clientWidth;
-                const height = canvas.height = window.innerHeight;
-
-                ctx.moveTo(0, 0);
-                ctx.lineTo(width, height);
-                ctx.stroke();
-
-                function reset() {
-                }
             </script>
 
             <button type="button" onclick="reset()">Reset</button>
