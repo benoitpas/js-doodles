@@ -48,11 +48,16 @@ function newHailstone() {
     let size = random(10,20)
     let x = random(size, width-size)
     let y = random(size, size)
-    let hs = new Hailstone(x,y,'#F0F', size)
+    let color = random(15,255)
+    let hs = new Hailstone(x,y,`rgba(${color},0,${color},1)`, size)
     hs.draw()
     stones.push(hs)
 }
 
+function reset() {
+    // interesting way to clear the array !
+    stones.length = 0
+}
 // Background to animation
 ctx.moveTo(0, height)
 ctx.lineTo(width, height)
