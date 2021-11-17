@@ -5,7 +5,7 @@ const width = canvas.width = document.getElementById("main").clientWidth;
 const height = canvas.height = window.innerHeight;
 
 const stones = []
-const speed = 1
+const accCoef = 1e4
 
 function random(min, max) {
     const num = Math.floor(Math.random() * (max - min + 1)) + min
@@ -18,6 +18,9 @@ class Hailstone {
         this.y = y
         this.color = color
         this.size = size
+        this.xSpeed = 0
+        this.yAcc = (this.size ^ 3)/accCoef
+        this.ySpeed = width*this.yAcc
     }
 
     draw() {
@@ -28,7 +31,14 @@ class Hailstone {
     }
 
     update() {
-        this.y = Math.min(this.y + speed, height-this.size)
+        // Next step
+        this.ySpeed = this.ySpeed + this.yAcc
+        this.y = this.y + this.ySpeed
+        // Check for bounce on ground
+        if (this.y > height-this.size) {
+            this.ySpeed = - this.ySpeed*0.5
+            this.y = height-this.size
+        }
     }
 }
   
@@ -49,7 +59,7 @@ ctx.lineTo(width, height)
 ctx.stroke()
 
 function loop() {
-    ctx.fillStyle = 'rgba(128,0,255,0.25)'
+    ctx.fillStyle = 'rgba(255,255,255,1)'
     ctx.fillRect(0,0,width,height)
   
     for(let i = 0; i < stones.length; i++) {
