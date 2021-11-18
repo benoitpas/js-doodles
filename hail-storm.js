@@ -6,6 +6,7 @@ const height = canvas.height = window.innerHeight;
 
 const stones = []
 const accCoef = 1e4
+const groundBounce = 0.5
 
 function random(min, max) {
     const num = Math.floor(Math.random() * (max - min + 1)) + min
@@ -13,14 +14,15 @@ function random(min, max) {
 }
 
 class Hailstone {
-    constructor(x, y, color, size) {
+    constructor(x,y,color,size, xSpeed,ySpeed,xAcc,yAcc) {
         this.x = x
         this.y = y
         this.color = color
         this.size = size
-        this.xSpeed = 0
-        this.yAcc = (this.size ^ 3)/accCoef
-        this.ySpeed = width*this.yAcc
+        this.xSpeed = xSpeed
+        this.ySpeed = ySpeed
+        this.xAcc = xAcc
+        this.yAcc = yAcc
     }
 
     draw() {
@@ -32,13 +34,20 @@ class Hailstone {
 
     update() {
         // Next step
-        this.ySpeed = this.ySpeed + this.yAcc
-        this.y = this.y + this.ySpeed
-        // Check for bounce on ground
-        if (this.y > height-this.size) {
-            this.ySpeed = - this.ySpeed*0.5
-            this.y = height-this.size
+        let nextXSpeed = this.xSpeed + this.xAcc
+        let nextYSpeed = this.ySpeed + this.yAcc
+        let nextY = this.y + this.ySpeed
+        let nextX = this.x + this.xSpeed
+        // Find interestinct ball
+        let sorted = stones.sort((a,b)=> (a.x-b.x)^2 + (a.y-b,y)^2)
+        let closest = 0
+        let distance = ()
+        for(let i=0; i<stones.length;i++) {
+
         }
+        // Check for bounce on ground
+        let [y, ySpeed] = (nextY > height - this.size ? [height-this.size, - this.ySpeed*groundBounce] : [nextY, nextYSpeed])
+        return new Hailstone(this.x, y, this.color, this.size, this.xSpeed, ySpeed, this.yAcc)
     }
 }
   
@@ -49,7 +58,10 @@ function newHailstone() {
     let x = random(size, width-size)
     let y = random(size, size)
     let color = random(15,255)
-    let hs = new Hailstone(x,y,`rgba(${color},0,${color},1)`, size)
+    let yAcc = (size ^ 3) / accCoef
+    let ySpeed = width * yAcc
+
+    let hs = new Hailstone(x,y,`rgba(${color},0,${color},1)`, size, 0, ySpeed, yAcc)
     hs.draw()
     stones.push(hs)
 }
@@ -69,7 +81,10 @@ function loop() {
   
     for(let i = 0; i < stones.length; i++) {
         stones[i].draw()
-        stones[i].update()
+    }
+
+    for(let i = 0; i < stones.length; i++) {
+        stones[i] = stones[i].update()
     }
   
     requestAnimationFrame(loop);
