@@ -28,6 +28,9 @@ function afterCollision(v1, v2, m1, m2, theta1, theta2, psy) {
     return [v1x,v1y,v2x,v2y]
 }
 
+function distance(x1, y1, x2, y2) {
+    return Math.pow(x1-x2,2) + Math.pow(y1-y2,2)
+}
 class Hailstone {
     constructor(x,y,color,size, xSpeed,ySpeed,xAcc,yAcc) {
         this.x = x
@@ -48,17 +51,22 @@ class Hailstone {
     }
 
     update() {
-        // Next step
-        let nextXSpeed = this.xSpeed + this.xAcc
-        let nextYSpeed = this.ySpeed + this.yAcc
-        let nextY = this.y + this.ySpeed
-        let nextX = this.x + this.xSpeed
         // Find intersectinct ball
-        let sorted = stones.map(e => e).sort((a,b)=> (a.x-b.x)^2 + (a.y-b.y)^2)
-        let closest = sorted.slice(1,2)
-        // Check for bounce on ground
-        let [y, ySpeed] = (nextY > height - this.size ? [height-this.size, - this.ySpeed*groundBounce] : [nextY, nextYSpeed])
-        return new Hailstone(this.x, y, this.color, this.size, this.xSpeed, ySpeed, this.xAcc, this.yAcc)
+        let sorted = stones.map(e => e).sort((a,b)=> distance(a.x,a.y,this.x,this.y)-distance(this.x,this.y,b.x,b.y))
+        let closest = sorted.slice(1,2)[0]
+        let r = this
+        if (closest && distance(this.x, this.y,closest.x,closest.y)<=(Math.pow(this.size+closest.size,2))) {
+        } else {
+            // Next step
+            let nextXSpeed = this.xSpeed + this.xAcc
+            let nextYSpeed = this.ySpeed + this.yAcc
+            let nextY = this.y + this.ySpeed
+            let nextX = this.x + this.xSpeed
+            // Check for bounce on ground
+            let [y, ySpeed] = (nextY > height - this.size ? [height-this.size, - this.ySpeed*groundBounce] : [nextY, nextYSpeed])
+            r = new Hailstone(this.x, y, this.color, this.size, this.xSpeed, ySpeed, this.xAcc, this.yAcc)
+        }
+        return r
     }
 }
   
