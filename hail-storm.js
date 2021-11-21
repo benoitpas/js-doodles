@@ -28,9 +28,21 @@ function afterCollision(v1, v2, m1, m2, theta1, theta2, psy) {
     return [v1x,v1y,v2x,v2y]
 }
 
+function angle(x1,y1,x2,y2) {
+    let [[ex1,ey1],[ex2,ey2]] = (x1<x2 ? [[x1,y1],[x2,y2]] : [[x2,y2],[x1,y1]])
+    return Math.atan((ey2-ey1)/(ex2-ex1))+Math.PI
+}
+
+function toPol(x,y) {
+    let d = Math.sqrt(x*x+y*y)
+    let a = Math.atan(y/x)
+    return [d,a]
+}
+
 function distance(x1, y1, x2, y2) {
     return Math.pow(x1-x2,2) + Math.pow(y1-y2,2)
 }
+
 class Hailstone {
     constructor(x,y,color,size, xSpeed,ySpeed,xAcc,yAcc) {
         this.x = x
@@ -56,6 +68,11 @@ class Hailstone {
         let closest = sorted.slice(1,2)[0]
         let r = this
         if (closest && distance(this.x, this.y,closest.x,closest.y)<=(Math.pow(this.size+closest.size,2))) {
+            let psy = angle(this.x, this.y, closest.x, closest.y)
+            let [v1, theta1] = toPol(this.xSpeed, this.ySpeed)
+            let [v2, theta2] = toPol(closest.xSpeed, closest.ySpeed)
+            let [v1x,v1y,v2x,v2y] = afterCollision(v1,v2, Math.pow(this.size,3), Math.pow(closest.size,3),theta1,theta2,psy)
+            r = new Hailstone(this.x+v1x, this.y+v1y, this.color, this.size, v1x, v1y, this.xAcc, this.yAcc)
         } else {
             // Next step
             let nextXSpeed = this.xSpeed + this.xAcc
