@@ -29,13 +29,17 @@ function afterCollision(v1, v2, m1, m2, theta1, theta2, psy) {
 }
 
 function angle(x1,y1,x2,y2) {
-    let [[ex1,ey1],[ex2,ey2]] = (x1<x2 ? [[x1,y1],[x2,y2]] : [[x2,y2],[x1,y1]])
-    return Math.atan((ey2-ey1)/(ex2-ex1))+Math.PI
+    //let [[ex1,ey1],[ex2,ey2]] = (x1<x2 ? [[x1,y1],[x2,y2]] : [[x2,y2],[x1,y1]])
+    let w = x2-x1
+    let h = y2-y1
+    let r = (w == 0 ? Math.sign(h) * Math.PI/2 :
+        Math.atan(h/w) + (w >= 0 ? 0 : Math.PI))
+    return r
 }
 
 function toPol(x,y) {
     let d = Math.sqrt(x*x+y*y)
-    let a = Math.atan(y/x)
+    let a = angle(0,0,x,y)
     return [d,a]
 }
 
@@ -81,7 +85,7 @@ class Hailstone {
             let nextX = this.x + this.xSpeed
             // Check for bounce on ground
             let [y, ySpeed] = (nextY > height - this.size ? [height-this.size, - this.ySpeed*groundBounce] : [nextY, nextYSpeed])
-            r = new Hailstone(this.x, y, this.color, this.size, this.xSpeed, ySpeed, this.xAcc, this.yAcc)
+            r = new Hailstone(this.x, y, this.color, this.size, nextXSpeed, ySpeed, this.xAcc, this.yAcc)
         }
         return r
     }
