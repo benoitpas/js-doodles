@@ -66,27 +66,34 @@ class Hailstone {
         ctx.fill()
     }
 
+    clone() {
+        return new Hailstone(this.x, this.y, this.color, this.size, this.xSpeed, this.ySpeed, this.xAcc, this.yAcc)
+    }
+
     update() {
         // Find intersectinct ball
         let sorted = stones.map(e => e).sort((a,b)=> distance(a.x,a.y,this.x,this.y)-distance(this.x,this.y,b.x,b.y))
         let closest = sorted.slice(1,2)[0]
-        let r = this
-        if (closest && distance(this.x, this.y,closest.x,closest.y)<=(Math.pow(this.size+closest.size,2))) {
+        let r = this.clone()
+        if (closest && distance(this.x, this.y,closest.x,closest.y)<(Math.pow(this.size+closest.size,2))) {
             let psy = angle(this.x, this.y, closest.x, closest.y)
             let [v1, theta1] = toPol(this.xSpeed, this.ySpeed)
             let [v2, theta2] = toPol(closest.xSpeed, closest.ySpeed)
             let [v1x,v1y,v2x,v2y] = afterCollision(v1,v2, Math.pow(this.size,3), Math.pow(closest.size,3),theta1,theta2,psy)
-            r = new Hailstone(this.x+v1x, this.y+v1y, this.color, this.size, v1x, v1y, this.xAcc, this.yAcc)
-        } else {
-            // Next step
-            let nextXSpeed = this.xSpeed + this.xAcc
-            let nextYSpeed = this.ySpeed + this.yAcc
-            let nextY = this.y + this.ySpeed
-            let nextX = this.x + this.xSpeed
-            // Check for bounce on ground
-            let [y, ySpeed] = (nextY > height - this.size ? [height-this.size, - this.ySpeed*groundBounce] : [nextY, nextYSpeed])
-            r = new Hailstone(this.x, y, this.color, this.size, nextXSpeed, ySpeed, this.xAcc, this.yAcc)
+            r.xSpeed = v1x
+            r.ySpeed = v1y
         }
+        // Next step
+        let nextYSpeed = r.ySpeed + r.yAcc
+        r.xSpeed += r.xAcc
+        let nextY = r.y + r.ySpeed
+        let nextX = r.x + r.xSpeed
+        // Check for sides
+        r.x = (nextX < 0 ? nextX + width : (nextX>=width ? nextX-width : nextX))
+        // Check for bounce on ground
+        let [rY, rYSpeed] = (nextY > height - this.size ? [height-this.size, - this.ySpeed*groundBounce] : [nextY, nextYSpeed])
+        r.y = rY
+        r.ySpeed = rYSpeed
         return r
     }
 }
