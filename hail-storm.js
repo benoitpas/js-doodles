@@ -6,7 +6,8 @@ const width = canvas.width = document.getElementById("main").clientWidth
 const height = canvas.height = window.innerHeight
 
 let stones = []
-const accCoef = 1e4
+const iAccCoef = 1e4
+let accCoef = iAccCoef
 const groundBounce = 0.5
 
 function random(min, max) {
@@ -125,6 +126,12 @@ ctx.stroke()
 function loop() {
     ctx.fillStyle = 'rgba(255,255,255,1)'
     ctx.fillRect(0,0,width,height)
+
+    let g = document.getElementById('gravity')
+    if (g) {
+        accCoef = iAccCoef / parseFloat(g.value)
+    }
+
   
     for(let i = 0; i < stones.length; i++) {
         stones[i].draw()
