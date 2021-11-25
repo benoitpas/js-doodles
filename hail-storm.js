@@ -6,9 +6,9 @@ const width = canvas.width = document.getElementById("main").clientWidth
 const height = canvas.height = window.innerHeight
 
 let stones = []
-const iAccCoef = 1e4
+const iAccCoef = 5e5
 let accCoef = iAccCoef
-const groundBounce = 0.5
+const groundBounce = 0.3
 
 function random(min, max) {
     const num = Math.floor(Math.random() * (max - min + 1)) + min
@@ -49,16 +49,19 @@ function distance(x1, y1, x2, y2) {
 }
 
 class Hailstone {
-    constructor(x,y,color,size, xSpeed,ySpeed,xAcc,yAcc) {
+    constructor(x,y,color,size, xSpeed,ySpeed) {
         this.x = x
         this.y = y
         this.color = color
         this.size = size
         this.xSpeed = xSpeed
         this.ySpeed = ySpeed
-        this.xAcc = xAcc
-        this.yAcc = yAcc
     }
+
+     yAcc() {
+        return Math.pow(this.size,3) / accCoef
+    }
+    
 
     draw() {
         ctx.beginPath();
@@ -68,7 +71,7 @@ class Hailstone {
     }
 
     clone() {
-        return new Hailstone(this.x, this.y, this.color, this.size, this.xSpeed, this.ySpeed, this.xAcc, this.yAcc)
+        return new Hailstone(this.x, this.y, this.color, this.size, this.xSpeed, this.ySpeed)
     }
 
     update() {
@@ -85,8 +88,7 @@ class Hailstone {
             r.ySpeed = v1y
         }
         // Next step
-        let nextYSpeed = r.ySpeed + r.yAcc
-        r.xSpeed += r.xAcc
+        let nextYSpeed = r.ySpeed + r.yAcc()
         let nextY = r.y + r.ySpeed
         let nextX = r.x + r.xSpeed
         // Check for sides
@@ -99,17 +101,13 @@ class Hailstone {
     }
 }
   
-
-
 function newHailstone() {
     let size = random(10,20)
     let x = random(size, width-size)
     let y = size
     let color = random(15,255)
-    let yAcc = (size ^ 3) / accCoef
-    let ySpeed = width * yAcc
-
-    let hs = new Hailstone(x,y,`rgba(${color},0,${color},1)`, size, 0, ySpeed, 0, yAcc)
+    let hs = new Hailstone(x,y,`rgba(${color},0,${color},1)`, size, 0, 0)
+    hs.ySpeed = width * hs.yAcc()
     hs.draw()
     stones.push(hs)
 }
