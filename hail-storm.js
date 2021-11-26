@@ -8,7 +8,7 @@ const height = canvas.height = window.innerHeight
 let stones = []
 const iAccCoef = 5e5
 let accCoef = iAccCoef
-const groundBounce = 0.3
+let groundBounce = 0.3
 
 function random(min, max) {
     const num = Math.floor(Math.random() * (max - min + 1)) + min
@@ -128,6 +128,10 @@ function loop() {
     let g = document.getElementById('gravity')
     if (g) {
         accCoef = iAccCoef / parseFloat(g.value)
+    }
+    let gb = document.getElementById('groundBounce')
+    if (gb) {
+        groundBounce = parseFloat(gb.value)
     }
 
   
