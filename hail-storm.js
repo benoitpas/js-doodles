@@ -90,13 +90,21 @@ class Hailstone {
         // Next step
         let nextYSpeed = r.ySpeed + r.yAcc()
         let nextY = r.y + r.ySpeed
+        // Check for bounce on ground
+        if (nextY > height - this.size) {
+            nextY = height-this.size
+            nextYSpeed = - this.ySpeed*groundBounce
+        }
+        r.y = nextY
+        r.ySpeed = nextYSpeed
+        // Check if ball is sliding on the floor, then reduce speed
+        if (nextY ==  height-this.size && Math.abs(nextYSpeed) < 0.01) {
+            r.xSpeed = r.xSpeed / 2
+        }
         let nextX = r.x + r.xSpeed
         // Check for sides
         r.x = (nextX < 0 ? nextX + width : (nextX>=width ? nextX-width : nextX))
-        // Check for bounce on ground
-        let [rY, rYSpeed] = (nextY > height - this.size ? [height-this.size, - this.ySpeed*groundBounce] : [nextY, nextYSpeed])
-        r.y = rY
-        r.ySpeed = rYSpeed
+
         return r
     }
 }
