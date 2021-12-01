@@ -124,14 +124,14 @@ function reset() {
     // interesting way to clear the array !
     stones.length = 0
 }
-// Background to animation
-ctx.moveTo(0, height)
-ctx.lineTo(width, height)
-ctx.stroke()
 
 function loop() {
+    // Background to animation
     ctx.fillStyle = 'rgba(255,255,255,1)'
     ctx.fillRect(0,0,width,height)
+    ctx.moveTo(0, height)
+    ctx.lineTo(width, height)
+    ctx.stroke()
 
     let g = document.getElementById('gravity')
     if (g) {
