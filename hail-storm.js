@@ -75,7 +75,8 @@ class Hailstone {
     }
 
     update() {
-        // Find intersectinct ball
+        // Find intersectincting ball
+        // map(e => e) is necessary to create a copy of the 'stones' array as sort modifies it
         let sorted = stones.map(e => e).sort((a,b)=> distance(a.x,a.y,this.x,this.y)-distance(this.x,this.y,b.x,b.y))
         let closest = sorted.slice(1,2)[0]
         let r = this.clone()
