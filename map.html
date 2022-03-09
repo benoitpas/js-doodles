@@ -2,19 +2,28 @@
 <html>
 
 <head>
-    <title>OSM and Leaflet</title>
+    <title>Display routes on map</title>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 </head>
 
 <body>
     <div id="map" style="width: 900px; height: 580px"></div>
-    <label for="gpx">Select a gpx file:</label>
+    <label for="gpx">Select one or multiple gpx file(s):</label>
     <input type="file"
        id="gpx" name="gpx"
-       accept=".gpx">
+       accept=".gpx"
+       multiple = true
+       onchange = "loadGpx()">
 
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script>
+        const input = document.querySelector('input')
+
+        function loadGpx() {
+            for(const file of input.files) {
+                console.log(file.name)
+            }
+        }
         // Creating map options
         var mapOptions = {
             center: [51.2469, -0.3574],
