@@ -21,7 +21,23 @@
 
         function loadGpx() {
             for(const file of input.files) {
+                let reader = new FileReader()
                 console.log(file.name)
+                reader.readAsText(file)
+
+                reader.onload = function() {
+                    let parser = new DOMParser()
+                    let xmlDoc = parser.parseFromString(reader.result,"text/xml")
+                    let points = xmlDoc.getElementsByTagName("trkpt")
+                    let latlngs = [];
+                    for(const point of points) {
+                        latlngs.push([Number(point.attributes.lat.value),Number(point.attributes.lon.value)])
+                    }
+                    var polyline = L.polyline(latlngs, {color: 'red'})
+                    console.log(polyline)
+                    polyline.addTo(map)
+                }
+
             }
         }
         // Creating map options
@@ -37,7 +53,7 @@
         var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
         // Adding layer to the map
-        map.addLayer(layer);
+        map.addLayer(layer)
     </script>
 </body>
 
