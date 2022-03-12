@@ -4,16 +4,23 @@
 <head>
     <title>Display routes on map</title>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="map.css">
 </head>
 
 <body>
-    <div id="map" style="width: 900px; height: 580px"></div>
-    <label for="gpx">Select one or multiple gpx file(s):</label>
-    <input type="file"
-       id="gpx" name="gpx"
-       accept=".gpx"
-       multiple = true
-       onchange = "loadGpx()">
+    <div class="box">
+        <div class="row header">
+            <label for="gpx">Select one or multiple gpx file(s):</label>
+            <input type="file"
+                id="gpx" name="gpx"
+                accept=".gpx"
+                multiple = true
+                onchange = "loadGpx()">
+        </div>
+        <div id="map" class="row content"></div></div>
+        <div class="row footer">
+        </div>
+    </div>
 
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script>
@@ -33,7 +40,7 @@
                     for(const point of points) {
                         latlngs.push([Number(point.attributes.lat.value),Number(point.attributes.lon.value)])
                     }
-                    var polyline = L.polyline(latlngs, {color: 'red'})
+                    let polyline = L.polyline(latlngs, {color: 'red'})
                     console.log(polyline)
                     polyline.addTo(map)
                 }
@@ -41,16 +48,16 @@
             }
         }
         // Creating map options
-        var mapOptions = {
+        const mapOptions = {
             center: [51.2469, -0.3574],
             zoom: 10
         }
 
         // Creating a map object
-        var map = new L.map('map', mapOptions);
+        const map = new L.map('map', mapOptions);
 
         // Creating a Layer object
-        var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        const layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
         // Adding layer to the map
         map.addLayer(layer)
